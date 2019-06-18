@@ -227,14 +227,24 @@ namespace NevMem {
         Set() : root(nullptr) {}
 
         Set(const Set& other) : Set() {
-            root = recursive_copy_node_(other.root);
+            try {
+                root = recursive_copy_node_(other.root);
+            } catch (std::bad_alloc e) {
+                recursive_delete_(root);
+                throw e;
+            }
         }
 
         template <typename InputIter>
         Set(InputIter begin, InputIter end) : Set() {
-            while (begin != end) {
-                insert(*begin);
-                ++begin;
+            try {
+                while (begin != end) {
+                    insert(*begin);
+                    ++begin;
+                }
+            } catch (std::bad_alloc e) {
+                recursive_copy_node_(root);
+                throw e;
             }
         }
 
