@@ -243,7 +243,6 @@ namespace NevMem {
                     ++begin;
                 }
             } catch (std::bad_alloc e) {
-                std::cerr << "Exception in iterators ctor\n";
                 recursive_copy_node_(root);
                 throw e;
             }
