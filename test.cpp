@@ -11,7 +11,8 @@ int main() {
             for (size_t i = 0; i != 1000000; ++i) {
                 a.insert(i);
             }
-            std::cout << a.size() << "\n";
+            Set<int> b = a;
+            std::cout << a.size() << " " << b.size() << "\n";
         } catch (const std::exception& e) {
             std::cout << "Exception was caught\n";
             std::cout << e.what() << "\n";
