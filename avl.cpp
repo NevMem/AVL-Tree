@@ -5,6 +5,9 @@
 #include <cstdlib>
 
 namespace NevMem {
+    int constructed = 0;
+    int deconstructed = 0;
+
     template <typename T>
     class AVLNode {
      public:
@@ -14,8 +17,12 @@ namespace NevMem {
         AVLNode* right;
         size_t size, depth;
 
-        AVLNode(const T& nodeValue) : value(nodeValue), parent(nullptr), left(nullptr),
-            right(nullptr), size(1), depth(1) {}
+        AVLNode(const T& nodeValue) :
+            value(nodeValue), parent(nullptr), left(nullptr), right(nullptr), size(1), depth(1) { constructed += 1; }
+
+        ~AVLNode() {
+            deconstructed += 1;
+        }
     };
 
     template <typename T>
