@@ -230,6 +230,7 @@ namespace NevMem {
             try {
                 root = recursive_copy_node_(other.root);
             } catch (std::bad_alloc e) {
+                std::cerr << "Exception in copy constrcutor\n";
                 recursive_delete_(root);
                 throw e;
             }
@@ -243,6 +244,7 @@ namespace NevMem {
                     ++begin;
                 }
             } catch (std::bad_alloc e) {
+                std::cerr << "Exception in iterators constrcutor\n";
                 recursive_copy_node_(root);
                 throw e;
             }
@@ -256,6 +258,7 @@ namespace NevMem {
                 try {
                     root = recursive_copy_node_(other.root);
                 } catch (std::bad_alloc e) {
+                    std::cerr << "Exception = operator\n";
                     recursive_delete_(root);
                     throw e;
                 }
