@@ -253,7 +253,12 @@ namespace NevMem {
         Set& operator=(const Set& other) {
             if (root != other.root) {
                 recursive_delete_(root);
-                root = recursive_copy_node_(other.root);
+                try {
+                    root = recursive_copy_node_(other.root);
+                } catch (std::bad_alloc e) {
+                    recursive_delete_(root);
+                    throw e;
+                }
             }
             return *this;
         }
