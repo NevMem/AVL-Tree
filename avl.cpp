@@ -5,6 +5,7 @@
 #include <cstdlib>
 
 namespace NevMem {
+
     template <typename T>
     class AVLNode {
      public:
@@ -14,8 +15,8 @@ namespace NevMem {
         AVLNode* right;
         size_t size, depth;
 
-        AVLNode(const T& nodeValue) : value(nodeValue), parent(nullptr), left(nullptr),
-            right(nullptr), size(1), depth(1) {}
+        AVLNode(const T& nodeValue) :
+            value(nodeValue), parent(nullptr), left(nullptr), right(nullptr), size(1), depth(1) {}
     };
 
     template <typename T>
@@ -54,8 +55,19 @@ namespace NevMem {
         AVLNode<T>* recursive_copy_node_(const AVLNode<T>* v) {
             if (!v) return nullptr;
             auto current = new AVLNode<T>(v->value);
-            current->left = recursive_copy_node_(v->left);
-            current->right = recursive_copy_node_(v->right);
+            try {
+                current->left = recursive_copy_node_(v->left);
+            } catch (std::bad_alloc e) {
+                delete current;
+                throw e;
+            }
+            try {
+                current->right = recursive_copy_node_(v->right);
+            } catch (std::bad_alloc e) {
+                recursive_delete_(current->left);
+                delete current;
+                throw e;
+            }
             recalc_(current);
             set_parent_(current->left, current);
             set_parent_(current->right, current);
@@ -225,9 +237,15 @@ namespace NevMem {
 
         template <typename InputIter>
         Set(InputIter begin, InputIter end) : Set() {
-            while (begin != end) {
-                insert(*begin);
-                ++begin;
+            try {
+                while (begin != end) {
+                    insert(*begin);
+                    ++begin;
+                }
+            } catch (std::bad_alloc e) {
+                std::cerr << "Exception in iterators ctor\n";
+                recursive_copy_node_(root);
+                throw e;
             }
         }
 
