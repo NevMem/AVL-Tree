@@ -14,7 +14,7 @@ int main() {
             std::cout << a.size() << "\n";
         } catch (const std::exception& e) {
             std::cout << "Exception was caught\n";
-            std::cout << e.what << "\n";
+            std::cout << e.what() << "\n";
         }
     }
     std::cout << "constructed: " << NevMem::constructed << "\n";
